@@ -1,0 +1,922 @@
+================================================================================
+        PLAYWRIGHT WITH PYTHON & WEB SCRAPING - COMPREHENSIVE ROADMAP
+================================================================================
+
+Created: February 26, 2026
+Estimated Duration: 13-19 weeks (3-5 months with consistent practice)
+
+================================================================================
+                            TABLE OF CONTENTS
+================================================================================
+
+1. Phase 1: Prerequisites
+2. Phase 2: Web Scraping Foundations
+3. Phase 3: Playwright Fundamentals
+4. Phase 4: Advanced Playwright
+5. Phase 5: Scraping with Playwright
+6. Phase 6: Data Management & Storage
+7. Phase 7: Production & Best Practices
+8. Practice Projects
+9. Recommended Resources
+10. Timeline Summary
+
+================================================================================
+                    PHASE 1: PREREQUISITES (1-2 WEEKS)
+================================================================================
+
+PYTHON FUNDAMENTALS
+-------------------
+[ ] Variables and data types
+[ ] Control flow (if/else, loops)
+[ ] Functions and OOP basics
+[ ] File handling (JSON, CSV)
+[ ] Exception handling (try/except)
+[ ] Virtual environments & pip
+[ ] List comprehensions
+[ ] Lambda functions
+[ ] Decorators (basic understanding)
+
+WEB BASICS
+----------
+[ ] HTML structure
+    - Tags and attributes
+    - DOM tree structure
+    - Semantic HTML elements
+    
+[ ] CSS Selectors
+    - Class selectors (.classname)
+    - ID selectors (#idname)
+    - Attribute selectors ([attr=value])
+    - Pseudo-selectors (:first-child, :nth-child)
+    - Combinators (>, +, ~, space)
+    
+[ ] XPath Basics
+    - Absolute vs relative paths
+    - Predicates and functions
+    - Axes (parent, child, sibling)
+    
+[ ] HTTP Fundamentals
+    - GET and POST methods
+    - Headers and cookies
+    - Status codes (200, 404, 500, etc.)
+    - Request/Response cycle
+    
+[ ] Browser DevTools
+    - Elements tab (inspect element)
+    - Network tab (XHR, fetch requests)
+    - Console tab
+    - Copy selector/XPath features
+
+================================================================================
+                PHASE 2: WEB SCRAPING FOUNDATIONS (2-3 WEEKS)
+================================================================================
+
+WEEK 1: REQUESTS & BEAUTIFULSOUP
+--------------------------------
+
+Installing Libraries:
+    pip install requests beautifulsoup4 lxml
+
+Requests Library:
+[ ] Making GET requests
+[ ] Making POST requests
+[ ] Custom headers
+[ ] Handling cookies
+[ ] Session objects
+[ ] Timeout handling
+[ ] SSL verification
+
+Example Code:
+    import requests
+    
+    response = requests.get('https://example.com')
+    print(response.status_code)
+    print(response.text)
+    
+    # With headers
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=headers)
+
+BeautifulSoup Parsing:
+[ ] Creating soup objects
+[ ] find() - single element
+[ ] find_all() - multiple elements
+[ ] select() - CSS selectors
+[ ] select_one() - single CSS selector
+[ ] Navigating the tree
+[ ] Extracting text and attributes
+
+Example Code:
+    from bs4 import BeautifulSoup
+    
+    soup = BeautifulSoup(html_content, 'lxml')
+    
+    # Find by tag
+    title = soup.find('title').text
+    
+    # Find by class
+    items = soup.find_all('div', class_='item')
+    
+    # CSS selector
+    links = soup.select('a.nav-link')
+
+WEEK 2-3: INTERMEDIATE SCRAPING
+-------------------------------
+[ ] Session management
+[ ] Handling login forms
+[ ] CSRF token extraction
+[ ] Pagination handling
+[ ] Rate limiting (time.sleep)
+[ ] User-Agent rotation
+[ ] Error handling and retries
+[ ] Using lxml for faster parsing
+[ ] Saving data to CSV
+[ ] Saving data to JSON
+
+Practice Projects:
+1. [ ] Scrape quotes from quotes.toscrape.com
+2. [ ] Extract product data from a static e-commerce site
+3. [ ] Build a news headline aggregator
+
+================================================================================
+                PHASE 3: PLAYWRIGHT FUNDAMENTALS (3-4 WEEKS)
+================================================================================
+
+WEEK 1: SETUP & BASICS
+----------------------
+
+Installation:
+    pip install playwright
+    playwright install
+
+Core Concepts:
+[ ] Understanding Browser, Context, Page objects
+[ ] Sync API vs Async API
+[ ] Launching browsers (Chromium, Firefox, WebKit)
+[ ] Headless vs headed mode
+[ ] Navigation methods
+[ ] Screenshots and PDFs
+
+Basic Example:
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+        page.goto("https://example.com")
+        print(page.title())
+        page.screenshot(path="screenshot.png")
+        browser.close()
+
+Key Methods:
+[ ] page.goto(url) - Navigate to URL
+[ ] page.title() - Get page title
+[ ] page.content() - Get HTML content
+[ ] page.screenshot() - Take screenshot
+[ ] page.pdf() - Generate PDF
+[ ] browser.new_context() - Create isolated context
+[ ] context.new_page() - Create new page
+
+WEEK 2: SELECTORS & INTERACTIONS
+--------------------------------
+
+Selector Types:
+[ ] CSS selectors
+    page.locator("div.classname")
+    page.locator("#idname")
+    page.locator("[data-testid='value']")
+
+[ ] XPath selectors
+    page.locator("xpath=//div[@class='item']")
+
+[ ] Text selectors
+    page.locator("text=Click me")
+    page.locator("text=/regex pattern/i")
+
+[ ] Role selectors
+    page.get_by_role("button", name="Submit")
+    page.get_by_role("link", name="Home")
+
+[ ] Built-in locators (recommended)
+    page.get_by_text("Hello")
+    page.get_by_label("Username")
+    page.get_by_placeholder("Enter email")
+    page.get_by_alt_text("Logo")
+    page.get_by_title("Title")
+    page.get_by_test_id("submit-btn")
+
+Interactions:
+[ ] page.click() - Click element
+[ ] page.fill() - Fill input field
+[ ] page.type() - Type with keyboard events
+[ ] page.press() - Press keyboard key
+[ ] page.check() - Check checkbox
+[ ] page.uncheck() - Uncheck checkbox
+[ ] page.select_option() - Select dropdown option
+[ ] page.set_input_files() - Upload files
+[ ] page.hover() - Hover over element
+[ ] page.drag_to() - Drag and drop
+
+Example:
+    # Fill a form
+    page.fill("#username", "myuser")
+    page.fill("#password", "mypass")
+    page.click("button[type='submit']")
+    
+    # Select dropdown
+    page.select_option("select#country", "US")
+    
+    # Upload file
+    page.set_input_files("input[type='file']", "path/to/file.pdf")
+
+WEEK 3: WAITING & SYNCHRONIZATION
+---------------------------------
+
+Auto-waiting (Built-in):
+- Playwright automatically waits for elements to be actionable
+- Waits for element to be visible, stable, enabled
+- Default timeout: 30 seconds
+
+Explicit Waiting:
+[ ] page.wait_for_selector(selector)
+[ ] page.wait_for_load_state("networkidle")
+[ ] page.wait_for_load_state("domcontentloaded")
+[ ] page.wait_for_load_state("load")
+[ ] page.wait_for_timeout(ms) - Use sparingly!
+[ ] page.wait_for_function(js_function)
+[ ] page.wait_for_url(url_pattern)
+[ ] page.wait_for_response(url_pattern)
+[ ] page.wait_for_request(url_pattern)
+
+Locator Waiting:
+[ ] locator.wait_for() - Wait for element
+[ ] expect(locator).to_be_visible()
+[ ] expect(locator).to_have_text()
+
+Example:
+    # Wait for element to appear
+    page.wait_for_selector(".results-loaded")
+    
+    # Wait for network to be idle
+    page.goto(url)
+    page.wait_for_load_state("networkidle")
+    
+    # Wait for specific response
+    with page.expect_response("**/api/data") as response_info:
+        page.click("#load-data")
+    response = response_info.value
+
+WEEK 4: ADVANCED NAVIGATION
+---------------------------
+[ ] Multiple pages/tabs
+    - context.pages - List all pages
+    - page.expect_popup() - Handle new tabs
+    
+[ ] Frames and iframes
+    - page.frame_locator()
+    - page.frames
+    
+[ ] Dialogs (alert, confirm, prompt)
+    - page.on("dialog", handler)
+    
+[ ] Browser contexts
+    - Isolated sessions
+    - Separate cookies/storage
+    
+[ ] Device emulation
+    - playwright.devices["iPhone 13"]
+    - page.set_viewport_size()
+    
+[ ] Geolocation
+    - context.set_geolocation()
+    
+[ ] Permissions
+    - context.grant_permissions()
+
+Example - Multiple Tabs:
+    with context.expect_page() as new_page_info:
+        page.click("a[target='_blank']")
+    new_page = new_page_info.value
+    new_page.wait_for_load_state()
+    print(new_page.title())
+
+Example - Frames:
+    frame = page.frame_locator("#iframe-id")
+    frame.locator("button").click()
+
+Example - Dialogs:
+    page.on("dialog", lambda dialog: dialog.accept())
+    page.click("#show-alert")
+
+================================================================================
+                    PHASE 4: ADVANCED PLAYWRIGHT (2-3 WEEKS)
+================================================================================
+
+NETWORK INTERCEPTION
+--------------------
+[ ] Monitoring network requests
+[ ] Blocking requests (images, ads)
+[ ] Modifying requests/responses
+[ ] Mocking API responses
+
+Example - Block Images:
+    page.route("**/*.{png,jpg,jpeg,gif,svg}", lambda route: route.abort())
+
+Example - Mock API:
+    def mock_api(route):
+        route.fulfill(
+            status=200,
+            content_type="application/json",
+            body='{"data": "mocked"}'
+        )
+    page.route("**/api/users", mock_api)
+
+Example - Capture Responses:
+    def handle_response(response):
+        if "/api/" in response.url:
+            print(f"API Response: {response.url}")
+            print(response.json())
+    
+    page.on("response", handle_response)
+
+AUTHENTICATION STRATEGIES
+-------------------------
+[ ] Cookie-based authentication
+[ ] Storage state save/reuse
+[ ] HTTP Basic authentication
+[ ] Token-based auth handling
+
+Save Login State:
+    # First time - login and save state
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto("https://example.com/login")
+    page.fill("#username", "user")
+    page.fill("#password", "pass")
+    page.click("#submit")
+    context.storage_state(path="auth_state.json")
+    
+    # Later - reuse saved state
+    context = browser.new_context(storage_state="auth_state.json")
+    page = context.new_page()
+    page.goto("https://example.com/dashboard")  # Already logged in!
+
+PERFORMANCE & STEALTH
+---------------------
+[ ] Headless mode optimization
+[ ] Browser launch arguments
+[ ] Disabling unnecessary features
+[ ] Proxy configuration
+[ ] Stealth techniques
+
+Launch Options:
+    browser = p.chromium.launch(
+        headless=True,
+        args=[
+            '--disable-blink-features=AutomationControlled',
+            '--disable-dev-shm-usage',
+            '--no-sandbox'
+        ]
+    )
+
+Proxy Setup:
+    browser = p.chromium.launch(
+        proxy={
+            "server": "http://proxy.example.com:8080",
+            "username": "user",
+            "password": "pass"
+        }
+    )
+
+Stealth Context:
+    context = browser.new_context(
+        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
+        viewport={"width": 1920, "height": 1080},
+        locale="en-US",
+        timezone_id="America/New_York"
+    )
+
+ASYNC PLAYWRIGHT
+----------------
+[ ] Understanding asyncio basics
+[ ] Async context managers
+[ ] Concurrent page operations
+[ ] Performance benefits
+
+Async Example:
+    import asyncio
+    from playwright.async_api import async_playwright
+
+    async def main():
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto("https://example.com")
+            title = await page.title()
+            print(title)
+            await browser.close()
+
+    asyncio.run(main())
+
+Concurrent Scraping:
+    async def scrape_page(browser, url):
+        page = await browser.new_page()
+        await page.goto(url)
+        title = await page.title()
+        await page.close()
+        return title
+
+    async def main():
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            urls = ["https://example1.com", "https://example2.com"]
+            tasks = [scrape_page(browser, url) for url in urls]
+            results = await asyncio.gather(*tasks)
+            print(results)
+            await browser.close()
+
+================================================================================
+                PHASE 5: SCRAPING WITH PLAYWRIGHT (2-3 WEEKS)
+================================================================================
+
+DYNAMIC CONTENT EXTRACTION
+--------------------------
+[ ] JavaScript-rendered pages
+[ ] Single Page Applications (SPAs)
+[ ] Infinite scroll handling
+[ ] AJAX content waiting
+[ ] Lazy-loaded images
+
+Infinite Scroll Example:
+    previous_height = 0
+    while True:
+        # Scroll to bottom
+        page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        page.wait_for_timeout(2000)  # Wait for content
+        
+        # Check if we've reached the end
+        new_height = page.evaluate("document.body.scrollHeight")
+        if new_height == previous_height:
+            break
+        previous_height = new_height
+
+DATA EXTRACTION PATTERNS
+------------------------
+[ ] Extracting text content
+[ ] Extracting attributes
+[ ] Extracting multiple elements
+[ ] Structured data extraction
+[ ] Table scraping
+
+Example - Extract Products:
+    products = []
+    items = page.locator(".product-card").all()
+    
+    for item in items:
+        product = {
+            "name": item.locator(".name").text_content(),
+            "price": item.locator(".price").text_content(),
+            "link": item.locator("a").get_attribute("href"),
+            "image": item.locator("img").get_attribute("src")
+        }
+        products.append(product)
+
+Example - Table Scraping:
+    table_data = []
+    rows = page.locator("table tbody tr").all()
+    
+    for row in rows:
+        cells = row.locator("td").all()
+        row_data = [cell.text_content() for cell in cells]
+        table_data.append(row_data)
+
+HANDLING ANTI-BOT MEASURES
+--------------------------
+[ ] CAPTCHA strategies
+    - Manual intervention
+    - CAPTCHA solving services
+    - Session persistence
+    
+[ ] Rate limiting
+    - Random delays
+    - Request throttling
+    - Respectful scraping
+    
+[ ] IP rotation
+    - Proxy pools
+    - Rotating proxies
+    - Residential proxies
+    
+[ ] Browser fingerprinting
+    - Randomized viewport
+    - Varied user agents
+    - Natural mouse movements
+
+Anti-Detection Tips:
+    import random
+    import time
+    
+    # Random delays
+    time.sleep(random.uniform(1, 3))
+    
+    # Vary viewport
+    viewports = [
+        {"width": 1920, "height": 1080},
+        {"width": 1366, "height": 768},
+        {"width": 1536, "height": 864}
+    ]
+    page.set_viewport_size(random.choice(viewports))
+    
+    # Human-like typing
+    page.type("#search", "query", delay=random.randint(50, 150))
+
+COMBINING TOOLS
+---------------
+Decision Matrix:
+    
+    Use Requests + BeautifulSoup when:
+    - Static HTML pages
+    - No JavaScript rendering needed
+    - Simple data extraction
+    - High-speed scraping needed
+    
+    Use Playwright when:
+    - JavaScript-rendered content
+    - User interactions required
+    - Login/authentication needed
+    - Complex navigation flows
+    - Anti-bot measures present
+
+Hybrid Approach:
+    # Use Playwright to get rendered HTML, then parse with BeautifulSoup
+    from playwright.sync_api import sync_playwright
+    from bs4 import BeautifulSoup
+    
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto("https://example.com")
+        page.wait_for_load_state("networkidle")
+        
+        html = page.content()
+        soup = BeautifulSoup(html, 'lxml')
+        
+        # Fast parsing with BeautifulSoup
+        items = soup.select(".item")
+        browser.close()
+
+================================================================================
+                PHASE 6: DATA MANAGEMENT & STORAGE (1-2 WEEKS)
+================================================================================
+
+DATA FORMATS
+------------
+[ ] CSV files
+[ ] JSON files
+[ ] XML files
+[ ] Excel files (openpyxl)
+
+CSV Example:
+    import csv
+    
+    with open('data.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=['name', 'price', 'url'])
+        writer.writeheader()
+        writer.writerows(products)
+
+JSON Example:
+    import json
+    
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(products, f, indent=2, ensure_ascii=False)
+
+DATABASE INTEGRATION
+--------------------
+[ ] SQLite (built-in, simple)
+[ ] PostgreSQL (production)
+[ ] MongoDB (document store)
+
+SQLite Example:
+    import sqlite3
+    
+    conn = sqlite3.connect('scraper.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            price REAL,
+            url TEXT UNIQUE,
+            scraped_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    cursor.execute('''
+        INSERT OR IGNORE INTO products (name, price, url)
+        VALUES (?, ?, ?)
+    ''', (product['name'], product['price'], product['url']))
+    
+    conn.commit()
+    conn.close()
+
+DATA CLEANING
+-------------
+[ ] Pandas for data manipulation
+[ ] String cleaning and normalization
+[ ] Handling missing values
+[ ] Deduplication
+[ ] Data validation
+
+Pandas Example:
+    import pandas as pd
+    
+    df = pd.DataFrame(products)
+    
+    # Clean price column
+    df['price'] = df['price'].str.replace('$', '').astype(float)
+    
+    # Remove duplicates
+    df = df.drop_duplicates(subset=['url'])
+    
+    # Handle missing values
+    df = df.fillna({'price': 0, 'name': 'Unknown'})
+    
+    # Save cleaned data
+    df.to_csv('cleaned_data.csv', index=False)
+
+INCREMENTAL SCRAPING
+--------------------
+[ ] Tracking scraped URLs
+[ ] Timestamp-based updates
+[ ] Change detection
+[ ] Resume functionality
+
+================================================================================
+            PHASE 7: PRODUCTION & BEST PRACTICES (2 WEEKS)
+================================================================================
+
+ERROR HANDLING & RELIABILITY
+----------------------------
+[ ] Try/except blocks
+[ ] Retry mechanisms
+[ ] Timeout handling
+[ ] Graceful degradation
+
+Robust Scraping Example:
+    from playwright.sync_api import TimeoutError
+    import time
+    
+    def scrape_with_retry(page, url, max_retries=3):
+        for attempt in range(max_retries):
+            try:
+                page.goto(url, timeout=30000)
+                page.wait_for_selector(".content", timeout=10000)
+                return page.content()
+            except TimeoutError:
+                print(f"Attempt {attempt + 1} failed, retrying...")
+                time.sleep(2 ** attempt)  # Exponential backoff
+        
+        raise Exception(f"Failed to scrape {url} after {max_retries} attempts")
+
+SCALABILITY
+-----------
+[ ] Concurrent scraping
+[ ] Queue-based architecture
+[ ] Distributed scraping
+[ ] Docker containerization
+[ ] Cloud deployment
+
+Concurrent Example:
+    import asyncio
+    from asyncio import Semaphore
+    
+    async def scrape_url(semaphore, browser, url):
+        async with semaphore:  # Limit concurrent pages
+            page = await browser.new_page()
+            try:
+                await page.goto(url)
+                return await page.title()
+            finally:
+                await page.close()
+    
+    async def main():
+        semaphore = Semaphore(5)  # Max 5 concurrent pages
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            urls = [...]  # List of URLs
+            tasks = [scrape_url(semaphore, browser, url) for url in urls]
+            results = await asyncio.gather(*tasks)
+            await browser.close()
+
+ETHICS & LEGALITY
+-----------------
+[ ] robots.txt compliance
+[ ] Terms of Service awareness
+[ ] Rate limiting (be polite!)
+[ ] Data privacy (GDPR, etc.)
+[ ] Legal boundaries
+
+Ethical Scraping Checklist:
+1. [ ] Check robots.txt before scraping
+2. [ ] Read the site's Terms of Service
+3. [ ] Implement reasonable delays between requests
+4. [ ] Identify your scraper (custom User-Agent)
+5. [ ] Don't overload servers
+6. [ ] Respect copyright on scraped content
+7. [ ] Handle personal data responsibly
+8. [ ] Consider API alternatives first
+
+LOGGING & MONITORING
+--------------------
+[ ] Structured logging
+[ ] Progress tracking
+[ ] Error reporting
+[ ] Performance metrics
+
+Logging Example:
+    import logging
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('scraper.log'),
+            logging.StreamHandler()
+        ]
+    )
+    
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Starting scrape of {url}")
+    logger.error(f"Failed to scrape {url}: {error}")
+    logger.warning(f"Rate limit hit, sleeping for 60s")
+
+================================================================================
+                        PRACTICE PROJECTS
+================================================================================
+
+PROJECT 1: Quote Scraper (Beginner)
+-----------------------------------
+Site: quotes.toscrape.com
+Skills: Basic selectors, pagination, data storage
+Tasks:
+[ ] Scrape all quotes with authors and tags
+[ ] Handle pagination
+[ ] Save to JSON file
+[ ] Add error handling
+
+PROJECT 2: E-commerce Price Tracker (Intermediate)
+--------------------------------------------------
+Skills: Dynamic content, scheduling, notifications
+Tasks:
+[ ] Scrape product prices from multiple sites
+[ ] Store in database with timestamps
+[ ] Track price changes over time
+[ ] Send alerts on price drops (optional)
+
+PROJECT 3: Job Board Aggregator (Intermediate)
+----------------------------------------------
+Skills: Multiple sites, forms, search, filtering
+Tasks:
+[ ] Scrape from Indeed, LinkedIn, Glassdoor (test sites)
+[ ] Handle search parameters
+[ ] Normalize data across sources
+[ ] Deduplication
+
+PROJECT 4: Social Media Scraper (Advanced)
+------------------------------------------
+Skills: Authentication, infinite scroll, rate limiting
+Tasks:
+[ ] Login handling
+[ ] Infinite scroll implementation
+[ ] Media downloading
+[ ] Anti-bot circumvention
+
+PROJECT 5: Real Estate Data Collector (Advanced)
+------------------------------------------------
+Skills: Complex selectors, maps, anti-bot, large scale
+Tasks:
+[ ] Property listings extraction
+[ ] Location data handling
+[ ] Image downloading
+[ ] Incremental updates
+
+PROJECT 6: Automated Form Submission Bot (Advanced)
+---------------------------------------------------
+Skills: Multi-step flows, file uploads, validation
+Tasks:
+[ ] Navigate multi-page forms
+[ ] Handle file uploads
+[ ] CAPTCHA strategies
+[ ] Error recovery
+
+================================================================================
+                        RECOMMENDED RESOURCES
+================================================================================
+
+OFFICIAL DOCUMENTATION
+----------------------
+- Playwright Python: https://playwright.dev/python/
+- BeautifulSoup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+- Requests: https://requests.readthedocs.io/
+
+PRACTICE SITES
+--------------
+- quotes.toscrape.com - Simple quotes site
+- books.toscrape.com - Mock bookstore
+- scrapethissite.com - Scraping tutorials
+- webscraper.io/test-sites - Various test scenarios
+- httpbin.org - HTTP testing
+
+TOOLS
+-----
+- Playwright Codegen: playwright codegen [url]
+  (Records actions and generates code)
+  
+- Playwright Trace Viewer: 
+  (Debug failed tests with screenshots/logs)
+  
+- Browser DevTools:
+  - Elements: Inspect DOM, copy selectors
+  - Network: Monitor API calls
+  - Console: Test JavaScript
+
+BOOKS
+-----
+- "Web Scraping with Python" by Ryan Mitchell
+- "Automate the Boring Stuff with Python" by Al Sweigart
+
+================================================================================
+                        TIMELINE SUMMARY
+================================================================================
+
++---------------------------+------------+--------------------------------+
+|          PHASE            |  DURATION  |            FOCUS               |
++---------------------------+------------+--------------------------------+
+| Prerequisites             | 1-2 weeks  | Python, HTML, CSS, HTTP        |
++---------------------------+------------+--------------------------------+
+| Scraping Basics           | 2-3 weeks  | Requests, BeautifulSoup        |
++---------------------------+------------+--------------------------------+
+| Playwright Fundamentals   | 3-4 weeks  | Core API, Selectors, Waits     |
++---------------------------+------------+--------------------------------+
+| Advanced Playwright       | 2-3 weeks  | Network, Auth, Async           |
++---------------------------+------------+--------------------------------+
+| Scraping with Playwright  | 2-3 weeks  | Dynamic Sites, Anti-bot        |
++---------------------------+------------+--------------------------------+
+| Data Management           | 1-2 weeks  | Storage, Cleaning, Databases   |
++---------------------------+------------+--------------------------------+
+| Production                | 2 weeks    | Scale, Reliability, Ethics     |
++---------------------------+------------+--------------------------------+
+| TOTAL                     | 13-19 wks  | ~3-5 months                    |
++---------------------------+------------+--------------------------------+
+
+WEEKLY COMMITMENT RECOMMENDATIONS
+---------------------------------
+- Minimum: 10-15 hours/week
+- Optimal: 15-20 hours/week
+- Intensive: 25-30 hours/week
+
+Split time between:
+- 40% - Reading/tutorials
+- 60% - Hands-on practice
+
+================================================================================
+                            PROGRESS TRACKER
+================================================================================
+
+Phase 1: Prerequisites           [ ] Complete
+Phase 2: Scraping Foundations    [ ] Complete
+Phase 3: Playwright Fundamentals [ ] Complete
+Phase 4: Advanced Playwright     [ ] Complete
+Phase 5: Scraping with Playwright[ ] Complete
+Phase 6: Data Management         [ ] Complete
+Phase 7: Production              [ ] Complete
+
+Projects Completed:
+[ ] Project 1: Quote Scraper
+[ ] Project 2: Price Tracker
+[ ] Project 3: Job Aggregator
+[ ] Project 4: Social Media Scraper
+[ ] Project 5: Real Estate Collector
+[ ] Project 6: Form Submission Bot
+
+================================================================================
+                              NOTES
+================================================================================
+
+Add your personal notes, bookmarks, and progress updates here:
+
+________________________________________________________________________________
+
+________________________________________________________________________________
+
+________________________________________________________________________________
+
+________________________________________________________________________________
+
+________________________________________________________________________________
+
+================================================================================
+                        END OF ROADMAP
+================================================================================

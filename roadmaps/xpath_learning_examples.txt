@@ -1,0 +1,398 @@
+XPATH LEARNING GUIDE (Comprehensive)
+====================================
+
+Date: 16 March 2026
+Purpose: Learn XPath from beginner to advanced with practical HTML DOM examples.
+
+--------------------------------------------------------------------
+1) WHAT IS XPATH?
+--------------------------------------------------------------------
+XPath (XML Path Language) is used to locate nodes in XML/HTML documents.
+In test automation (Selenium/Playwright), XPath helps identify elements.
+
+Think of XPath like a path expression through the DOM tree.
+
+Example:
+  //input[@id='email']
+means:
+  Find any <input> element whose id attribute is 'email'.
+
+
+--------------------------------------------------------------------
+2) SAMPLE HTML DOM (WE WILL REUSE THIS)
+--------------------------------------------------------------------
+Use this page to understand all examples:
+
+<html>
+  <body>
+    <div id="container">
+      <h1>Shop</h1>
+
+      <form id="loginForm">
+        <label>Email</label>
+        <input type="text" id="email" name="email" placeholder="Enter email" />
+
+        <label>Password</label>
+        <input type="password" id="password" name="password" />
+
+        <button type="submit" class="btn primary">Login</button>
+        <button type="button" class="btn secondary">Forgot Password</button>
+      </form>
+
+      <ul id="menu">
+        <li class="item active">Home</li>
+        <li class="item">Products</li>
+        <li class="item">Cart</li>
+      </ul>
+
+      <table id="orders">
+        <tr>
+          <th>Order</th><th>Status</th><th>Total</th>
+        </tr>
+        <tr>
+          <td>#1001</td><td>Paid</td><td>$80</td>
+        </tr>
+        <tr>
+          <td>#1002</td><td>Pending</td><td>$40</td>
+        </tr>
+      </table>
+
+      <a href="/profile" data-test="profile-link">My Profile</a>
+      <a href="/logout" data-test="logout-link">Logout</a>
+
+      <div class="card" data-role="product">
+        <h2>Phone</h2>
+        <p class="price">$999</p>
+        <button>Add to Cart</button>
+      </div>
+
+      <div class="card" data-role="product">
+        <h2>Laptop</h2>
+        <p class="price">$1499</p>
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+--------------------------------------------------------------------
+3) ABSOLUTE VS RELATIVE XPATH
+--------------------------------------------------------------------
+A) Absolute XPath (starts with /)
+   /html/body/div/form/input[1]
+   - Exact full path from root.
+   - Fragile: breaks if DOM structure changes.
+
+B) Relative XPath (starts with //)
+   //form[@id='loginForm']//input[@id='email']
+   - Preferred in automation.
+   - More stable and readable.
+
+Rule: Prefer relative XPath in real test projects.
+
+
+--------------------------------------------------------------------
+4) BASIC XPATH SYNTAX
+--------------------------------------------------------------------
+1) By tag
+   //input
+   -> all input elements
+
+2) By single attribute
+   //input[@id='email']
+   -> email input
+
+3) By another attribute
+   //button[@type='submit']
+   -> Login button
+
+4) By text()
+   //button[text()='Login']
+   -> button with exact text Login
+
+5) By contains(text())
+   //button[contains(text(),'Forgot')]
+   -> Forgot Password button
+
+6) By contains(@attr, 'value')
+   //button[contains(@class,'primary')]
+   -> class contains primary
+
+
+--------------------------------------------------------------------
+5) ATTRIBUTE-BASED EXAMPLES
+--------------------------------------------------------------------
+//a[@href='/logout']
+//a[@data-test='profile-link']
+//div[@data-role='product']
+//input[@placeholder='Enter email']
+//ul[@id='menu']/li[@class='item active']
+
+Multiple conditions:
+//input[@id='email' and @name='email']
+//button[@type='submit' and contains(@class,'btn')]
+
+OR condition:
+//button[@type='submit' or @type='button']
+
+NOT condition:
+//li[not(contains(@class,'active'))]
+
+
+--------------------------------------------------------------------
+6) TEXT-BASED EXAMPLES
+--------------------------------------------------------------------
+Exact text:
+//h1[text()='Shop']
+//a[text()='Logout']
+
+Contains text:
+//button[contains(text(),'Add to Cart')]
+//li[contains(text(),'Prod')]
+
+Normalize spaces (helpful for extra spaces/newlines):
+//button[normalize-space()='Login']
+
+Case-insensitive idea (XPath 1.0 style with translate):
+//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'logout')]
+
+
+--------------------------------------------------------------------
+7) INDEXING IN XPATH
+--------------------------------------------------------------------
+(//button)[1]   -> first button in document
+(//button)[2]   -> second button
+
+//ul[@id='menu']/li[1] -> Home
+//ul[@id='menu']/li[2] -> Products
+//ul[@id='menu']/li[last()] -> Cart
+//ul[@id='menu']/li[last()-1] -> Products
+
+Important:
+- Indexes in XPath are 1-based (not 0-based).
+
+
+--------------------------------------------------------------------
+8) AXES (VERY IMPORTANT)
+--------------------------------------------------------------------
+Axis helps navigate relationships in DOM.
+
+1) parent::
+   //input[@id='email']/parent::form
+   -> parent form of email input
+
+2) child::
+   //form[@id='loginForm']/child::button
+   -> child buttons of login form
+
+3) following-sibling::
+   //button[text()='Login']/following-sibling::button
+   -> Forgot Password button
+
+4) preceding-sibling::
+   //button[text()='Forgot Password']/preceding-sibling::button
+   -> Login button
+
+5) ancestor::
+   //p[@class='price']/ancestor::div[@class='card']
+   -> card containing that price
+
+6) descendant::
+   //div[@id='container']/descendant::a
+   -> all links inside container
+
+7) following::
+   //h1/following::form[1]
+   -> first form after h1
+
+8) preceding::
+   //table[@id='orders']/preceding::form[1]
+   -> form before table
+
+
+--------------------------------------------------------------------
+9) REAL-WORLD STABLE XPATH STRATEGY
+--------------------------------------------------------------------
+Best (if available):
+1) unique IDs
+   //input[@id='email']
+
+2) data-* attributes for testing
+   //a[@data-test='logout-link']
+
+3) meaningful combination
+   //form[@id='loginForm']//button[@type='submit']
+
+Avoid fragile selectors like:
+- deeply nested absolute paths
+- dynamic class names only
+- random index unless necessary
+
+
+--------------------------------------------------------------------
+10) TABLE XPATH EXAMPLES
+--------------------------------------------------------------------
+A) Second data row, second column (Status of order #1002)
+   //table[@id='orders']/tr[3]/td[2]
+
+B) Find row where Order is #1002, then get status
+   //table[@id='orders']/tr[td[1]='#1002']/td[2]
+
+C) All totals column
+   //table[@id='orders']/tr/td[3]
+
+D) Header names
+   //table[@id='orders']/tr[1]/th
+
+
+--------------------------------------------------------------------
+11) FORM XPATH EXAMPLES
+--------------------------------------------------------------------
+Email field:
+//form[@id='loginForm']//input[@name='email']
+
+Password field:
+//form[@id='loginForm']//input[@type='password']
+
+Login button:
+//form[@id='loginForm']//button[@type='submit']
+
+Forgot Password button by text:
+//form[@id='loginForm']//button[contains(text(),'Forgot')]
+
+
+--------------------------------------------------------------------
+12) PRODUCT CARD EXAMPLES
+--------------------------------------------------------------------
+All product names:
+//div[@data-role='product']/h2
+
+Price of Laptop card:
+//div[@data-role='product'][h2='Laptop']/p[@class='price']
+
+Add to Cart for Phone only:
+//div[@data-role='product'][h2='Phone']//button[contains(text(),'Add to Cart')]
+
+
+--------------------------------------------------------------------
+13) XPATH FUNCTIONS CHEAT SHEET
+--------------------------------------------------------------------
+contains(a, b)
+- true if a contains b
+- Example: //button[contains(@class,'primary')]
+
+starts-with(a, b)
+- true if a starts with b
+- Example: //a[starts-with(@data-test,'profile')]
+
+text()
+- node text
+- Example: //h1[text()='Shop']
+
+normalize-space()
+- trims and normalizes spaces
+- Example: //button[normalize-space()='Login']
+
+position()
+- current index position
+- Example: //li[position()=2]
+
+last()
+- last node in set
+- Example: //li[last()]
+
+
+--------------------------------------------------------------------
+14) ADVANCED COMBINED EXAMPLES
+--------------------------------------------------------------------
+A) Active menu item text:
+   //ul[@id='menu']/li[contains(@class,'active')]/text()
+
+B) Get link after profile link:
+   //a[@data-test='profile-link']/following-sibling::a[1]
+
+C) Any button inside card with product name Laptop:
+   //div[@class='card'][.//h2='Laptop']//button
+
+D) Input near label 'Email' (label-following input):
+   //label[normalize-space()='Email']/following::input[1]
+
+E) Row where status is Pending:
+   //table[@id='orders']/tr[td[2]='Pending']
+
+
+--------------------------------------------------------------------
+15) COMMON MISTAKES + FIXES
+--------------------------------------------------------------------
+Mistake 1: Using = with contains style logic
+Wrong: //button[@class='btn']
+Better: //button[contains(@class,'btn')]
+
+Mistake 2: Overusing index
+Wrong: (//input)[3]
+Better: //form[@id='loginForm']//input[@name='email']
+
+Mistake 3: Exact text when spaces may change
+Wrong: //button[text()=' Login ']
+Better: //button[normalize-space()='Login']
+
+Mistake 4: Absolute XPath in dynamic pages
+Wrong: /html/body/div/div[2]/form/button
+Better: //form[@id='loginForm']//button[@type='submit']
+
+
+--------------------------------------------------------------------
+16) PRACTICE EXERCISES (TRY YOURSELF)
+--------------------------------------------------------------------
+Using the sample DOM above, write XPath for:
+1) Cart menu item.
+2) Logout link.
+3) Price of Phone.
+4) Second button inside login form.
+5) Order row where total is $40.
+6) First product card's Add to Cart button.
+7) Parent div of the email input.
+8) All buttons in the document.
+9) The last li in menu.
+10) h1 text node.
+
+Suggested answers:
+1) //ul[@id='menu']/li[text()='Cart']
+2) //a[@data-test='logout-link']
+3) //div[@data-role='product'][h2='Phone']/p[@class='price']
+4) //form[@id='loginForm']/button[2]
+5) //table[@id='orders']/tr[td[3]='$40']
+6) (//div[@data-role='product']//button[contains(text(),'Add to Cart')])[1]
+7) //input[@id='email']/parent::*
+8) //button
+9) //ul[@id='menu']/li[last()]
+10) //h1/text()
+
+
+--------------------------------------------------------------------
+17) QUICK INTERVIEW POINTS (QA/AUTOMATION)
+--------------------------------------------------------------------
+- XPath is flexible and powerful for dynamic element location.
+- Relative XPath is preferred over absolute XPath.
+- Use stable attributes like id, name, data-test when possible.
+- Axes (parent, sibling, ancestor) are very useful when direct attributes are missing.
+- Keep XPath readable, maintainable, and as specific as needed.
+
+
+--------------------------------------------------------------------
+18) MINI REVISION
+--------------------------------------------------------------------
+Top 10 expressions to remember:
+1) //tag
+2) //tag[@attr='value']
+3) //tag[contains(@attr,'value')]
+4) //tag[text()='Exact Text']
+5) //tag[contains(text(),'partial')]
+6) (//tag)[n]
+7) //tag[last()]
+8) //node/parent::tag
+9) //node/following-sibling::tag
+10) //ancestor::tag
+
+End of Guide.

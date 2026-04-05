@@ -1,0 +1,1717 @@
+================================================================================
+                    PYTEST MASTERY ROADMAP - 30 DAY JOURNEY
+================================================================================
+
+Created: March 4, 2026
+Target: Pytest Expert - From Basics to Advanced Testing
+Duration: 30 Days (2-3 hours daily practice)
+Prerequisites: Python basics (variables, functions, OOP fundamentals)
+
+================================================================================
+                            TABLE OF CONTENTS
+================================================================================
+
+1. Pre-Learning Assessment
+2. Week 1 (Days 1-7): Fundamentals & Core Concepts
+3. Week 2 (Days 8-14): Fixtures & Test Organization
+4. Week 3 (Days 15-21): Advanced Features & Plugins
+5. Week 4 (Days 22-30): Real-World Projects & Best Practices
+6. Daily Practice Exercises
+7. Resources & References
+8. Certification & Next Steps
+
+================================================================================
+                        PRE-LEARNING ASSESSMENT
+================================================================================
+
+Before starting, ensure you have:
+
+PYTHON PREREQUISITES (Minimum Required)
+---------------------------------------
+[ ] Variables, data types (str, int, list, dict)
+[ ] Control flow (if/else, loops)
+[ ] Functions (def, parameters, return)
+[ ] Basic OOP (classes, methods, __init__)
+[ ] Imports and modules
+[ ] Virtual environments (venv)
+[ ] pip package manager
+
+SETUP CHECKLIST
+---------------
+[ ] Python 3.8+ installed
+[ ] Virtual environment created
+[ ] pytest installed (pip install pytest)
+[ ] Code editor/IDE (VS Code, PyCharm)
+[ ] Terminal/command line basics
+
+================================================================================
+            WEEK 1 (DAYS 1-7): FUNDAMENTALS & CORE CONCEPTS
+================================================================================
+
+DAY 1: Introduction to Pytest & First Tests
+--------------------------------------------
+TOPICS:
+- What is pytest and why use it?
+- Differences: pytest vs unittest vs nose
+- Test discovery mechanism
+- Naming conventions (test_*.py, *_test.py)
+- Running tests: pytest, pytest -v, pytest --help
+
+HANDS-ON:
+[ ] Install pytest in virtual environment
+[ ] Create first test file: test_basic.py
+[ ] Write 5 simple assert-based tests
+[ ] Run tests with different verbosity levels
+[ ] Understand test output and summary
+
+CODE EXAMPLES:
+```python
+# test_basic.py
+def test_addition():
+    assert 1 + 1 == 2
+
+def test_string_length():
+    assert len("pytest") == 6
+
+def test_list_contains():
+    assert 5 in [1, 2, 3, 4, 5]
+```
+
+COMMANDS TO MASTER:
+- pytest
+- pytest -v (verbose)
+- pytest --collect-only (dry run)
+- pytest test_basic.py (specific file)
+
+
+DAY 2: Assertions & Test Failures
+----------------------------------
+TOPICS:
+- assert statement deep dive
+- Introspection in pytest assertions
+- Testing exceptions with pytest.raises()
+- Testing warnings with pytest.warns()
+- Custom failure messages
+
+HANDS-ON:
+[ ] Write tests with different assertion types
+[ ] Test exception handling
+[ ] Test warning messages
+[ ] Understand assertion rewriting
+[ ] Practice reading detailed failure output
+
+CODE EXAMPLES:
+```python
+import pytest
+
+def test_division_by_zero():
+    with pytest.raises(ZeroDivisionError):
+        1 / 0
+
+def test_value_error_message():
+    with pytest.raises(ValueError, match="invalid literal"):
+        int("abc")
+
+def test_custom_message():
+    x = 10
+    assert x % 2 == 0, f"Expected {x} to be even"
+```
+
+
+DAY 3: Test Discovery & Organization
+-------------------------------------
+TOPICS:
+- Test discovery rules
+- Test file structure
+- Test function naming
+- Test class organization
+- Running specific tests
+
+HANDS-ON:
+[ ] Create multiple test files
+[ ] Organize tests in directories
+[ ] Use test classes for grouping
+[ ] Run specific tests using -k flag
+[ ] Run tests from specific directory
+
+PROJECT STRUCTURE:
+```
+tests/
+├── test_math_operations.py
+├── test_string_operations.py
+├── unit/
+│   ├── test_calculator.py
+│   └── test_validator.py
+└── integration/
+    └── test_api.py
+```
+
+COMMANDS TO MASTER:
+- pytest tests/
+- pytest tests/test_math_operations.py::test_addition
+- pytest -k "string"
+- pytest tests/unit/
+
+
+DAY 4: Markers - Categorizing Tests
+------------------------------------
+TOPICS:
+- Built-in markers (skip, skipif, xfail)
+- Custom markers
+- Marker expressions
+- Registering markers (pytest.ini)
+- Running marked tests selectively
+
+HANDS-ON:
+[ ] Use @pytest.mark.skip and @pytest.mark.skipif
+[ ] Create custom markers (smoke, regression, slow)
+[ ] Configure pytest.ini
+[ ] Run only smoke tests
+[ ] Use marker expressions (and, or, not)
+
+CODE EXAMPLES:
+```python
+import pytest
+import sys
+
+@pytest.mark.skip(reason="Not implemented yet")
+def test_future_feature():
+    pass
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Unix only")
+def test_unix_feature():
+    pass
+
+@pytest.mark.smoke
+@pytest.mark.regression
+def test_login():
+    assert True
+
+@pytest.mark.slow
+def test_long_running():
+    pass
+```
+
+pytest.ini:
+```ini
+[pytest]
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    slow: Tests that take > 1 second
+```
+
+COMMANDS TO MASTER:
+- pytest -m smoke
+- pytest -m "smoke and regression"
+- pytest -m "not slow"
+
+
+DAY 5: Parametrization - DRY Testing
+-------------------------------------
+TOPICS:
+- @pytest.mark.parametrize basics
+- Multiple parameter sets
+- Parametrizing with different data types
+- Naming parametrized tests
+- Combining fixtures and parametrization
+
+HANDS-ON:
+[ ] Parametrize function with simple values
+[ ] Parametrize with tuples and lists
+[ ] Use ids for readable test names
+[ ] Parametrize multiple arguments
+[ ] Create 30+ test cases with 5 lines of code
+
+CODE EXAMPLES:
+```python
+import pytest
+
+@pytest.mark.parametrize("input,expected", [
+    (1, 2),
+    (2, 4),
+    (3, 6),
+    (10, 20)
+])
+def test_double(input, expected):
+    assert input * 2 == expected
+
+@pytest.mark.parametrize("text", [
+    "hello",
+    "pytest",
+    "automation"
+], ids=["greeting", "framework", "action"])
+def test_uppercase(text):
+    assert text.upper() == text.upper()
+
+@pytest.mark.parametrize("a,b,expected", [
+    (1, 2, 3),
+    (5, 5, 10),
+    (10, -2, 8)
+])
+def test_addition(a, b, expected):
+    assert a + b == expected
+```
+
+
+DAY 6: Command Line Options & Configuration
+--------------------------------------------
+TOPICS:
+- Important pytest command line flags
+- pytest.ini configuration
+- Controlling test execution
+- Output formatting
+- Exit codes
+
+HANDS-ON:
+[ ] Create pytest.ini with common settings
+[ ] Use --maxfail to stop after N failures
+[ ] Use --tb for different traceback styles
+[ ] Use -x to stop at first failure
+[ ] Use --lf to run last failed tests
+
+pytest.ini TEMPLATE:
+```ini
+[pytest]
+minversion = 6.0
+testpaths = tests
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+addopts = -v --strict-markers --tb=short
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    slow: Tests that take > 1 second
+    api: API integration tests
+    unit: Unit tests
+```
+
+COMMANDS TO MASTER:
+- pytest -x (stop on first failure)
+- pytest --maxfail=2
+- pytest --tb=short/long/line/no
+- pytest --lf (last failed)
+- pytest --ff (failed first)
+- pytest -q (quiet)
+- pytest --durations=10 (slowest tests)
+
+
+DAY 7: Week 1 Review & Mini Project
+------------------------------------
+PRACTICE PROJECT: Calculator Testing Suite
+
+[ ] Create a calculator.py module with +, -, *, / operations
+[ ] Write 50+ tests using parametrization
+[ ] Organize tests in classes by operation type
+[ ] Use markers: smoke, regression, edge_cases
+[ ] Configure pytest.ini
+[ ] Generate test report
+
+REVIEW CHECKLIST:
+[ ] Can write basic pytest tests
+[ ] Understand assert and pytest.raises()
+[ ] Can organize tests in files/folders
+[ ] Can use markers effectively
+[ ] Can parametrize tests
+[ ] Comfortable with command line options
+[ ] Understand test discovery
+
+ASSIGNMENT:
+Create a string utility tester:
+- Test case conversions (upper, lower, title, capitalize)
+- Test string methods (strip, split, join, replace)
+- Use parametrization for multiple inputs
+- Mark slow tests vs fast tests
+- Create pytest.ini configuration
+
+================================================================================
+          WEEK 2 (DAYS 8-14): FIXTURES & TEST ORGANIZATION
+================================================================================
+
+DAY 8: Introduction to Fixtures
+--------------------------------
+TOPICS:
+- What are fixtures and why use them?
+- Basic fixture creation with @pytest.fixture
+- Using fixtures in test functions
+- Fixture naming conventions
+- Return values and yield fixtures
+
+HANDS-ON:
+[ ] Create your first fixture
+[ ] Use fixture in multiple tests
+[ ] Create fixtures that return data
+[ ] Create fixtures that setup/teardown
+[ ] Understand fixture execution flow
+
+CODE EXAMPLES:
+```python
+import pytest
+
+@pytest.fixture
+def sample_data():
+    return [1, 2, 3, 4, 5]
+
+def test_list_length(sample_data):
+    assert len(sample_data) == 5
+
+def test_list_sum(sample_data):
+    assert sum(sample_data) == 15
+
+@pytest.fixture
+def database_connection():
+    # Setup
+    conn = {"connected": True, "data": []}
+    print("\nSETUP: Database connected")
+    
+    yield conn  # Provide to test
+    
+    # Teardown
+    conn["connected"] = False
+    print("\nTEARDOWN: Database disconnected")
+
+def test_db_insert(database_connection):
+    database_connection["data"].append("record1")
+    assert len(database_connection["data"]) == 1
+```
+
+
+DAY 9: Fixture Scopes
+---------------------
+TOPICS:
+- Scope levels: function, class, module, package, session
+- When to use each scope
+- Performance optimization with scopes
+- Shared fixtures across tests
+- Fixture execution order
+
+HANDS-ON:
+[ ] Create fixtures with different scopes
+[ ] Measure performance difference
+[ ] Use session scope for expensive setup
+[ ] Use class scope for test classes
+[ ] Observe fixture execution with prints
+
+CODE EXAMPLES:
+```python
+import pytest
+
+@pytest.fixture(scope="session")
+def expensive_setup():
+    print("\n[SESSION] Expensive setup - runs once")
+    return {"api_key": "abc123"}
+
+@pytest.fixture(scope="module")
+def module_setup():
+    print("\n[MODULE] Module setup")
+    return {"config": "module_config"}
+
+@pytest.fixture(scope="class")
+def class_setup():
+    print("\n[CLASS] Class setup")
+    return {"data": []}
+
+@pytest.fixture(scope="function")  # Default
+def function_setup():
+    print("\n[FUNCTION] Function setup")
+    return {}
+```
+
+PERFORMANCE TIP:
+- Use session/module scope for: DB connections, API clients, config loading
+- Use function scope for: Test-specific data, isolated state
+
+
+DAY 10: conftest.py - Shared Fixtures
+--------------------------------------
+TOPICS:
+- Purpose of conftest.py
+- Fixture discovery mechanism
+- Multiple conftest.py files
+- Conftest hierarchy
+- Project-wide fixtures
+
+HANDS-ON:
+[ ] Create root conftest.py
+[ ] Create nested conftest.py files
+[ ] Share fixtures across test files
+[ ] Override fixtures in nested conftest
+[ ] Organize fixtures by scope
+
+PROJECT STRUCTURE:
+```
+tests/
+├── conftest.py                 # Root fixtures
+├── test_feature_a.py
+├── unit/
+│   ├── conftest.py            # Unit test fixtures
+│   └── test_calculator.py
+└── integration/
+    ├── conftest.py            # Integration fixtures
+    └── test_api.py
+```
+
+conftest.py EXAMPLE:
+```python
+import pytest
+
+@pytest.fixture(scope="session")
+def config():
+    return {
+        "base_url": "https://api.example.com",
+        "timeout": 30
+    }
+
+@pytest.fixture
+def api_client(config):
+    # Create client with config
+    return {"url": config["base_url"]}
+
+@pytest.fixture(autouse=True)
+def reset_state():
+    # Runs before every test automatically
+    print("\n[RESET] State reset")
+    yield
+    print("\n[CLEANUP] Test cleanup")
+```
+
+
+DAY 11: Fixture Dependencies & Chaining
+----------------------------------------
+TOPICS:
+- Fixtures using other fixtures
+- Fixture dependency graph
+- Order of execution
+- Fixture factories
+- Dynamic fixture generation
+
+HANDS-ON:
+[ ] Create fixtures that depend on other fixtures
+[ ] Build a fixture chain (3+ levels)
+[ ] Create fixture factory pattern
+[ ] Use request.param in fixtures
+[ ] Understand fixture resolution
+
+CODE EXAMPLES:
+```python
+import pytest
+
+@pytest.fixture(scope="session")
+def database():
+    print("\n[DB] Connect to database")
+    return {"connected": True}
+
+@pytest.fixture
+def db_cursor(database):
+    print("\n[CURSOR] Create cursor")
+    return {"db": database, "cursor": "active"}
+
+@pytest.fixture
+def db_transaction(db_cursor):
+    print("\n[TRANSACTION] Start transaction")
+    yield {"cursor": db_cursor}
+    print("\n[TRANSACTION] Commit transaction")
+
+def test_with_transaction(db_transaction):
+    assert db_transaction["cursor"]["db"]["connected"]
+
+# Fixture Factory Pattern
+@pytest.fixture
+def make_user():
+    def _make_user(name, email):
+        return {"name": name, "email": email}
+    return _make_user
+
+def test_user_creation(make_user):
+    user1 = make_user("Alice", "alice@example.com")
+    user2 = make_user("Bob", "bob@example.com")
+    assert user1["name"] == "Alice"
+```
+
+
+DAY 12: Built-in Fixtures
+--------------------------
+TOPICS:
+- tmp_path and tmpdir for temporary files
+- capsys and capfd for stdout/stderr capture
+- monkeypatch for mocking
+- request fixture for introspection
+- Other useful built-in fixtures
+
+HANDS-ON:
+[ ] Use tmp_path to create temp files
+[ ] Capture print output with capsys
+[ ] Mock environment variables with monkeypatch
+[ ] Access test metadata with request
+[ ] Use pytestconfig for configuration
+
+CODE EXAMPLES:
+```python
+import pytest
+
+def test_temp_file(tmp_path):
+    # tmp_path is a pathlib.Path object
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("Hello pytest")
+    assert test_file.read_text() == "Hello pytest"
+
+def test_print_output(capsys):
+    print("Hello")
+    print("World")
+    captured = capsys.readouterr()
+    assert "Hello" in captured.out
+    assert "World" in captured.out
+
+def test_env_variable(monkeypatch):
+    monkeypatch.setenv("API_KEY", "secret123")
+    import os
+    assert os.getenv("API_KEY") == "secret123"
+
+def test_request_fixture(request):
+    print(f"\nTest name: {request.node.name}")
+    print(f"Test file: {request.fspath}")
+```
+
+
+DAY 13: Autouse Fixtures & Finalization
+----------------------------------------
+TOPICS:
+- autouse=True for automatic execution
+- Fixture finalization methods
+- addfinalizer vs yield
+- Exception handling in fixtures
+- Fixture cleanup guarantees
+
+HANDS-ON:
+[ ] Create autouse fixture for logging
+[ ] Use addfinalizer for cleanup
+[ ] Compare yield vs addfinalizer
+[ ] Handle exceptions in fixtures
+[ ] Create test timing fixture
+
+CODE EXAMPLES:
+```python
+import pytest
+import time
+
+@pytest.fixture(autouse=True)
+def log_test_execution(request):
+    print(f"\n[START] {request.node.name}")
+    start_time = time.time()
+    
+    yield
+    
+    duration = time.time() - start_time
+    print(f"\n[END] {request.node.name} - {duration:.2f}s")
+
+@pytest.fixture
+def resource_with_finalizer(request):
+    resource = {"active": True}
+    
+    def cleanup():
+        resource["active"] = False
+        print("\n[CLEANUP] Resource cleaned up")
+    
+    request.addfinalizer(cleanup)
+    return resource
+
+@pytest.fixture(autouse=True, scope="session")
+def setup_test_environment():
+    print("\n" + "="*50)
+    print("TEST SESSION STARTING")
+    print("="*50)
+    
+    yield
+    
+    print("\n" + "="*50)
+    print("TEST SESSION ENDING")
+    print("="*50)
+```
+
+
+DAY 14: Week 2 Review & Project
+--------------------------------
+PRACTICE PROJECT: API Test Framework Foundation
+
+[ ] Create conftest.py with session-scoped API client
+[ ] Create fixtures for test data generation
+[ ] Use tmp_path for test file operations
+[ ] Implement autouse fixture for request/response logging
+[ ] Create fixture factory for creating test users
+[ ] Use monkeypatch for environment configuration
+
+REVIEW CHECKLIST:
+[ ] Understand fixture basics and benefits
+[ ] Know all fixture scopes and when to use them
+[ ] Can create and use conftest.py
+[ ] Can chain fixtures effectively
+[ ] Familiar with built-in fixtures
+[ ] Know autouse and finalization
+
+ASSIGNMENT:
+Create E-commerce Test Suite:
+- Session fixture: Database connection
+- Module fixture: Product catalog
+- Function fixture: Shopping cart (fresh each test)
+- Autouse fixture: Log all cart operations
+- Factory fixture: Create test products
+- Use tmp_path for receipt generation
+
+================================================================================
+        WEEK 3 (DAYS 15-21): ADVANCED FEATURES & PLUGINS
+================================================================================
+
+DAY 15: Mocking with pytest-mock
+---------------------------------
+TOPICS:
+- Introduction to mocking (what and why)
+- pytest-mock plugin installation
+- mocker fixture basics
+- Mocking functions and methods
+- Return values and side effects
+- Verifying mock calls
+
+HANDS-ON:
+[ ] Install pytest-mock: pip install pytest-mock
+[ ] Mock external API calls
+[ ] Mock database operations
+[ ] Verify mock was called with correct arguments
+[ ] Use side_effect for exceptions
+
+CODE EXAMPLES:
+```python
+# Source code (app.py)
+import requests
+
+def get_user(user_id):
+    response = requests.get(f"https://api.example.com/users/{user_id}")
+    return response.json()
+
+# Test file
+def test_get_user(mocker):
+    mock_get = mocker.patch('requests.get')
+    mock_get.return_value.json.return_value = {"id": 1, "name": "Alice"}
+    
+    result = get_user(1)
+    
+    assert result["name"] == "Alice"
+    mock_get.assert_called_once_with("https://api.example.com/users/1")
+
+def test_api_failure(mocker):
+    mock_get = mocker.patch('requests.get')
+    mock_get.side_effect = requests.exceptions.ConnectionError()
+    
+    with pytest.raises(requests.exceptions.ConnectionError):
+        get_user(1)
+```
+
+
+DAY 16: Test Coverage with pytest-cov
+--------------------------------------
+TOPICS:
+- Code coverage importance
+- Installing pytest-cov
+- Running tests with coverage
+- Coverage reports (terminal, HTML, XML)
+- Coverage thresholds
+- Branch coverage vs line coverage
+
+HANDS-ON:
+[ ] Install: pip install pytest-cov
+[ ] Run tests with coverage report
+[ ] Generate HTML coverage report
+[ ] Analyze uncovered lines
+[ ] Set coverage threshold in pytest.ini
+
+COMMANDS TO MASTER:
+```bash
+# Basic coverage
+pytest --cov=myapp tests/
+
+# With missing lines
+pytest --cov=myapp --cov-report=term-missing
+
+# HTML report
+pytest --cov=myapp --cov-report=html
+
+# Fail if coverage < 80%
+pytest --cov=myapp --cov-fail-under=80
+
+# Branch coverage
+pytest --cov=myapp --cov-branch
+```
+
+pytest.ini CONFIGURATION:
+```ini
+[pytest]
+addopts = 
+    --cov=myapp
+    --cov-report=html
+    --cov-report=term-missing
+    --cov-fail-under=80
+```
+
+
+DAY 17: Plugins Ecosystem
+--------------------------
+TOPICS:
+- Essential pytest plugins
+- Installing and using plugins
+- Plugin configuration
+- Creating plugin combinations
+
+MUST-KNOW PLUGINS:
+[ ] pytest-xdist (parallel testing)
+[ ] pytest-html (HTML reports)
+[ ] pytest-timeout (test timeouts)
+[ ] pytest-repeat (repeat tests)
+[ ] pytest-randomly (randomize test order)
+[ ] pytest-benchmark (performance benchmarking)
+
+INSTALLATION & USAGE:
+```bash
+pip install pytest-xdist pytest-html pytest-timeout pytest-repeat
+
+# Run tests in parallel (4 workers)
+pytest -n 4
+
+# Generate HTML report
+pytest --html=report.html --self-contained-html
+
+# Set timeout for tests
+pytest --timeout=5
+
+# Repeat each test 10 times
+pytest --count=10
+
+# Randomize test order
+pip install pytest-randomly
+pytest  # Automatically randomizes
+```
+
+DAY 18: API Testing with pytest + requests
+-------------------------------------------
+TOPICS:
+- requests library integration
+- Testing REST APIs
+- Request fixtures
+- Response validation
+- JSON schema validation
+- Testing different HTTP methods
+
+HANDS-ON:
+[ ] Install: pip install requests jsonschema
+[ ] Test GET, POST, PUT, DELETE endpoints
+[ ] Validate status codes
+[ ] Validate response headers
+[ ] Validate JSON schema
+[ ] Test error responses
+
+CODE EXAMPLES:
+```python
+import pytest
+import requests
+
+@pytest.fixture(scope="module")
+def api_base_url():
+    return "https://jsonplaceholder.typicode.com"
+
+@pytest.fixture
+def api_client(api_base_url):
+    session = requests.Session()
+    session.base_url = api_base_url
+    return session
+
+def test_get_users(api_base_url):
+    response = requests.get(f"{api_base_url}/users")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+    assert len(response.json()) > 0
+
+def test_get_single_user(api_base_url):
+    response = requests.get(f"{api_base_url}/users/1")
+    assert response.status_code == 200
+    data = response.json()
+    assert "id" in data
+    assert "name" in data
+    assert data["id"] == 1
+
+def test_create_post(api_base_url):
+    payload = {
+        "title": "Test Post",
+        "body": "Test content",
+        "userId": 1
+    }
+    response = requests.post(f"{api_base_url}/posts", json=payload)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["title"] == payload["title"]
+
+@pytest.mark.parametrize("user_id", [1, 2, 3, 4, 5])
+def test_multiple_users(api_base_url, user_id):
+    response = requests.get(f"{api_base_url}/users/{user_id}")
+    assert response.status_code == 200
+```
+
+
+DAY 19: Custom Assertions & Helpers
+------------------------------------
+TOPICS:
+- Creating custom assertion helpers
+- Pytest assertion introspection
+- Creating reusable test utilities
+- Custom matchers
+- Improving test readability
+
+HANDS-ON:
+[ ] Create custom assertion functions
+[ ] Build API response validators
+[ ] Create test data builders
+[ ] Implement helper modules
+[ ] Use pytest_assertrepr_compare hook
+
+CODE EXAMPLES:
+```python
+# helpers.py
+def assert_valid_email(email):
+    """Custom assertion for email validation"""
+    assert "@" in email, f"'{email}' is not a valid email (missing @)"
+    assert "." in email.split("@")[1], f"'{email}' domain invalid"
+    __tracebackhide__ = True  # Hide this function in traceback
+
+def assert_response_success(response):
+    """Assert API response is successful"""
+    __tracebackhide__ = True
+    assert response.status_code in range(200, 300), \
+        f"Expected success status, got {response.status_code}: {response.text}"
+
+class APIResponseValidator:
+    def __init__(self, response):
+        self.response = response
+    
+    def has_status(self, expected_status):
+        assert self.response.status_code == expected_status
+        return self
+    
+    def has_json_key(self, key):
+        data = self.response.json()
+        assert key in data, f"Key '{key}' not found in {list(data.keys())}"
+        return self
+    
+    def json_value_equals(self, key, value):
+        data = self.response.json()
+        assert data[key] == value
+        return self
+
+# test_api.py
+from helpers import assert_valid_email, APIResponseValidator
+
+def test_user_email():
+    assert_valid_email("test@example.com")
+
+def test_api_response():
+    response = requests.get("https://api.example.com/users/1")
+    validator = APIResponseValidator(response)
+    validator.has_status(200).has_json_key("id").json_value_equals("id", 1)
+```
+
+
+DAY 20: Hooks & Customization
+------------------------------
+TOPICS:
+- pytest hooks system
+- Common hooks (pytest_configure, pytest_collection_modifyitems)
+- Custom test collection
+- Custom report generation
+- Modifying test behavior
+
+HANDS-ON:
+[ ] Implement pytest_configure hook
+[ ] Use pytest_collection_modifyitems to modify tests
+[ ] Create custom markers dynamically
+[ ] Add custom test reports
+[ ] Implement pytest_runtest_setup hook
+
+CODE EXAMPLES (conftest.py):
+```python
+import pytest
+
+def pytest_configure(config):
+    """Called once at test session start"""
+    config.addinivalue_line(
+        "markers", "api: mark test as API test"
+    )
+    print("\n[HOOK] Test session configured")
+
+def pytest_collection_modifyitems(config, items):
+    """Modify collected tests"""
+    for item in items:
+        # Add 'api' marker to all tests in test_api.py files
+        if "test_api" in item.nodeid:
+            item.add_marker(pytest.mark.api)
+        
+        # Mark slow tests (based on certain criteria)
+        if "slow" in item.name.lower():
+            item.add_marker(pytest.mark.slow)
+
+def pytest_runtest_setup(item):
+    """Called before each test"""
+    print(f"\n[SETUP HOOK] Running: {item.name}")
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """Called after each test phase"""
+    outcome = yield
+    report = outcome.get_result()
+    
+    if report.when == "call":
+        if report.failed:
+            print(f"\n[FAILED] {item.name}")
+        elif report.passed:
+            print(f"\n[PASSED] {item.name}")
+```
+
+
+DAY 21: Week 3 Review & Advanced Project
+-----------------------------------------
+PRACTICE PROJECT: Complete API Test Suite with Reporting
+
+[ ] Test a public API (JSONPlaceholder, ReqRes, etc.)
+[ ] Use pytest-mock to mock external dependencies
+[ ] Generate coverage report (>80%)
+[ ] Run tests in parallel with pytest-xdist
+[ ] Generate HTML test report
+[ ] Create custom assertions for API validation
+[ ] Implement custom hooks for test metadata
+[ ] Use multiple plugins together
+
+REVIEW CHECKLIST:
+[ ] Can mock functions and services
+[ ] Can generate and analyze coverage reports
+[ ] Familiar with essential pytest plugins
+[ ] Can test REST APIs effectively
+[ ] Can create custom helpers and assertions
+[ ] Understand pytest hooks system
+
+ASSIGNMENT:
+Build "Weather API Test Suite":
+- Mock weather API responses
+- Parametrize tests for multiple cities
+- Custom assertion: assert_valid_temperature()
+- 85%+ code coverage
+- HTML report with pass/fail details
+- Parallel execution
+- Custom hook to log all API calls
+
+================================================================================
+      WEEK 4 (DAYS 22-30): REAL-WORLD PROJECTS & BEST PRACTICES
+================================================================================
+
+DAY 22: Testing Patterns & Best Practices
+------------------------------------------
+TOPICS:
+- AAA pattern (Arrange, Act, Assert)
+- Test isolation and independence
+- Test naming conventions
+- One assertion per test vs multiple
+- Test data management
+- Avoiding test interdependencies
+
+BEST PRACTICES:
+[ ] Write independent tests
+[ ] Use descriptive test names
+[ ] Keep tests simple and focused
+[ ] Avoid testing implementation details
+[ ] Use fixtures for setup/teardown
+[ ] Don't use sleep() - use proper waits
+[ ] Parametrize instead of looping
+
+GOOD vs BAD EXAMPLES:
+```python
+# BAD: Unclear name, multiple concepts
+def test_user():
+    user = User("Alice", 25)
+    assert user.name == "Alice"
+    assert user.age == 25
+    assert user.is_adult() == True
+
+# GOOD: Clear, focused tests
+def test_user_initialization_sets_name():
+    user = User("Alice", 25)
+    assert user.name == "Alice"
+
+def test_user_initialization_sets_age():
+    user = User("Alice", 25)
+    assert user.age == 25
+
+def test_user_is_adult_when_age_over_18():
+    user = User("Alice", 25)
+    assert user.is_adult() is True
+
+# BAD: Tests depend on each other
+class TestUserFlow:
+    user = None
+    
+    def test_1_create_user(self):
+        self.user = User("Alice", 25)
+    
+    def test_2_update_user(self):
+        self.user.name = "Bob"  # Depends on test_1
+
+# GOOD: Independent tests with fixtures
+@pytest.fixture
+def user():
+    return User("Alice", 25)
+
+def test_create_user(user):
+    assert user.name == "Alice"
+
+def test_update_user_name(user):
+    user.name = "Bob"
+    assert user.name == "Bob"
+```
+
+
+DAY 23: Database Testing
+-------------------------
+TOPICS:
+- Testing database operations
+- Test database setup/teardown
+- Transaction rollback pattern
+- Using SQLite for tests
+- Database fixtures
+- Migration testing
+
+HANDS-ON:
+[ ] Create test database fixture
+[ ] Test CRUD operations
+[ ] Use transactions for isolation
+[ ] Test with sample data
+[ ] Clean up after tests
+
+CODE EXAMPLES:
+```python
+import pytest
+import sqlite3
+
+@pytest.fixture(scope="module")
+def db_connection():
+    """Create test database"""
+    conn = sqlite3.connect(":memory:")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE
+        )
+    """)
+    conn.commit()
+    
+    yield conn
+    
+    conn.close()
+
+@pytest.fixture
+def db_cursor(db_connection):
+    """Provide cursor with transaction rollback"""
+    cursor = db_connection.cursor()
+    
+    yield cursor
+    
+    db_connection.rollback()  # Rollback after each test
+
+def test_insert_user(db_cursor):
+    db_cursor.execute(
+        "INSERT INTO users (name, email) VALUES (?, ?)",
+        ("Alice", "alice@example.com")
+    )
+    db_cursor.execute("SELECT * FROM users WHERE name = ?", ("Alice",))
+    result = db_cursor.fetchone()
+    assert result[1] == "Alice"
+
+def test_unique_email_constraint(db_cursor):
+    db_cursor.execute(
+        "INSERT INTO users (name, email) VALUES (?, ?)",
+        ("Alice", "alice@example.com")
+    )
+    
+    with pytest.raises(sqlite3.IntegrityError):
+        db_cursor.execute(
+            "INSERT INTO users (name, email) VALUES (?, ?)",
+            ("Bob", "alice@example.com")
+        )
+```
+
+
+DAY 24: CI/CD Integration
+--------------------------
+TOPICS:
+- Running pytest in CI/CD
+- GitHub Actions integration
+- GitLab CI integration
+- Test result artifacts
+- Coverage badges
+- Fail fast vs fail after all
+
+HANDS-ON:
+[ ] Create GitHub Actions workflow
+[ ] Upload test reports as artifacts
+[ ] Configure coverage reporting
+[ ] Set up status badges
+[ ] Schedule periodic test runs
+
+GITHUB ACTIONS EXAMPLE (.github/workflows/test.yml):
+```yaml
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-html
+    
+    - name: Run tests
+      run: |
+        pytest --cov=myapp --cov-report=xml --cov-report=html --html=report.html
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+    
+    - name: Upload test report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-report
+        path: report.html
+```
+
+
+DAY 25: Performance & Load Testing
+-----------------------------------
+TOPICS:
+- pytest-benchmark for performance tests
+- Baseline benchmarking
+- Regression detection
+- Load testing patterns
+- Profiling slow tests
+
+HANDS-ON:
+[ ] Install: pip install pytest-benchmark
+[ ] Benchmark function performance
+[ ] Compare against baseline
+[ ] Identify slow tests
+[ ] Optimize test execution
+
+CODE EXAMPLES:
+```python
+import pytest
+
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+def test_fibonacci_performance(benchmark):
+    result = benchmark(fibonacci, 10)
+    assert result == 55
+
+def test_bulk_insert_performance(benchmark, db_cursor):
+    def insert_users():
+        for i in range(100):
+            db_cursor.execute(
+                "INSERT INTO users (name, email) VALUES (?, ?)",
+                (f"User{i}", f"user{i}@example.com")
+            )
+    
+    benchmark(insert_users)
+
+# Compare performance
+@pytest.mark.parametrize("size", [10, 100, 1000])
+def test_list_comprehension_vs_loop(benchmark, size):
+    def using_comprehension():
+        return [x * 2 for x in range(size)]
+    
+    result = benchmark(using_comprehension)
+    assert len(result) == size
+```
+
+COMMANDS:
+```bash
+# Run benchmarks
+pytest --benchmark-only
+
+# Save baseline
+pytest --benchmark-save=baseline
+
+# Compare against baseline
+pytest --benchmark-compare=baseline
+
+# Show slowest tests
+pytest --durations=10
+```
+
+
+DAY 26: Flaky Test Handling
+----------------------------
+TOPICS:
+- What are flaky tests
+- Identifying flaky tests
+- pytest-rerunfailures plugin
+- pytest-flakefinder plugin
+- Strategies to fix flaky tests
+
+HANDS-ON:
+[ ] Install: pip install pytest-rerunfailures
+[ ] Identify flaky tests in your suite
+[ ] Use reruns to handle flaky tests
+[ ] Find root causes
+[ ] Replace time.sleep() with proper waits
+
+CODE EXAMPLES:
+```python
+import pytest
+import random
+
+# Flaky test example
+def test_flaky():
+    # Might fail randomly
+    assert random.choice([True, True, True, False])
+
+# Run with reruns
+# pytest --reruns 5 --reruns-delay 1
+
+# Mark specific test for reruns
+@pytest.mark.flaky(reruns=5, reruns_delay=2)
+def test_specific_flaky():
+    assert random.choice([True, True, False])
+
+# Better: Fix the flaky test
+def test_not_flaky():
+    # Use deterministic behavior
+    random.seed(42)
+    assert random.choice([True, False])
+```
+
+COMMANDS:
+```bash
+# Rerun failed tests up to 3 times
+pytest --reruns 3
+
+# With delay between reruns
+pytest --reruns 3 --reruns-delay 1
+
+# Find flaky tests
+pip install pytest-flakefinder
+pytest --flake-finder --flake-runs=10
+```
+
+
+DAY 27: Test Data Management
+-----------------------------
+TOPICS:
+- Test data strategies
+- Factories vs fixtures
+- Faker for realistic data
+- Factory Boy pattern
+- External test data (JSON, CSV)
+
+HANDS-ON:
+[ ] Install: pip install faker factory-boy
+[ ] Generate random test data
+[ ] Create data factories
+[ ] Load data from external files
+[ ] Create data builders
+
+CODE EXAMPLES:
+```python
+import pytest
+from faker import Faker
+
+fake = Faker()
+
+@pytest.fixture
+def random_user():
+    return {
+        "name": fake.name(),
+        "email": fake.email(),
+        "address": fake.address(),
+        "phone": fake.phone_number()
+    }
+
+def test_with_random_data(random_user):
+    assert "@" in random_user["email"]
+    assert len(random_user["name"]) > 0
+
+# Data Builder Pattern
+class UserBuilder:
+    def __init__(self):
+        self.data = {
+            "name": fake.name(),
+            "email": fake.email(),
+            "age": 25,
+            "active": True
+        }
+    
+    def with_name(self, name):
+        self.data["name"] = name
+        return self
+    
+    def with_age(self, age):
+        self.data["age"] = age
+        return self
+    
+    def inactive(self):
+        self.data["active"] = False
+        return self
+    
+    def build(self):
+        return self.data
+
+@pytest.fixture
+def user_builder():
+    return UserBuilder()
+
+def test_with_builder(user_builder):
+    user = user_builder.with_name("Alice").with_age(30).build()
+    assert user["name"] == "Alice"
+    assert user["age"] == 30
+
+# Load from JSON
+import json
+
+@pytest.fixture
+def test_data():
+    with open("tests/data/users.json") as f:
+        return json.load(f)
+
+@pytest.mark.parametrize("user_data", pytest.lazy_fixture("test_data"))
+def test_users_from_file(user_data):
+    assert "name" in user_data
+```
+
+
+DAY 28: Web Testing Integration (Preview)
+------------------------------------------
+TOPICS:
+- Pytest + Selenium basics
+- Pytest + Playwright integration
+- Page Object Model with pytest
+- Browser fixtures
+- Screenshot on failure
+
+HANDS-ON:
+[ ] Install: pip install selenium pytest-selenium
+[ ] Create browser fixture
+[ ] Test simple web interactions
+[ ] Capture screenshots on failure
+[ ] Organize with Page Objects
+
+CODE EXAMPLE:
+```python
+import pytest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+@pytest.fixture
+def browser():
+    driver = webdriver.Chrome()
+    driver.implicitly_wait(10)
+    
+    yield driver
+    
+    driver.quit()
+
+def test_google_search(browser):
+    browser.get("https://www.google.com")
+    assert "Google" in browser.title
+    
+    search_box = browser.find_element(By.NAME, "q")
+    search_box.send_keys("pytest")
+    search_box.submit()
+    
+    assert "pytest" in browser.title
+
+@pytest.fixture(autouse=True)
+def screenshot_on_failure(request, browser):
+    yield
+    if request.node.rep_call.failed:
+        browser.save_screenshot(f"screenshots/{request.node.name}.png")
+```
+
+
+DAY 29: Documentation & Reporting
+----------------------------------
+TOPICS:
+- Docstrings in tests
+- Allure reporting
+- Custom HTML reports
+- Test documentation best practices
+- Living documentation
+
+HANDS-ON:
+[ ] Install: pip install allure-pytest
+[ ] Add docstrings to all tests
+[ ] Generate Allure report
+[ ] Customize HTML reports
+[ ] Document test framework
+
+ALLURE EXAMPLE:
+```python
+import allure
+import pytest
+
+@allure.feature('User Management')
+@allure.story('User Registration')
+@allure.severity(allure.severity_level.CRITICAL)
+def test_user_registration():
+    """
+    Test user registration flow
+    
+    Steps:
+    1. Navigate to registration page
+    2. Fill in user details
+    3. Submit form
+    4. Verify user is created
+    """
+    with allure.step("Navigate to registration page"):
+        # code here
+        pass
+    
+    with allure.step("Fill user details"):
+        # code here
+        pass
+    
+    with allure.step("Submit form"):
+        # code here
+        pass
+    
+    assert True
+
+# Generate report
+# pytest --alluredir=allure-results
+# allure serve allure-results
+```
+
+
+DAY 30: Final Project & Mastery Assessment
+-------------------------------------------
+CAPSTONE PROJECT: Complete Test Automation Framework
+
+BUILD A COMPLETE TEST SUITE FOR:
+- REST API testing (CRUD operations)
+- Database validation
+- File operations
+- Performance benchmarks
+
+REQUIREMENTS:
+[ ] 100+ test cases
+[ ] 90%+ code coverage
+[ ] Organized in modules (api/, db/, unit/, integration/)
+[ ] conftest.py with shared fixtures
+[ ] Custom helpers and assertions
+[ ] pytest.ini configuration
+[ ] Parallel execution support
+[ ] HTML and Allure reports
+[ ] CI/CD workflow (GitHub Actions)
+[ ] Documentation (README.md)
+
+FRAMEWORK STRUCTURE:
+```
+test_framework/
+├── pytest.ini
+├── conftest.py
+├── requirements.txt
+├── README.md
+├── .github/
+│   └── workflows/
+│       └── test.yml
+├── src/
+│   ├── api/
+│   ├── database/
+│   └── utils/
+├── tests/
+│   ├── conftest.py
+│   ├── unit/
+│   │   ├── test_calculator.py
+│   │   └── test_validators.py
+│   ├── integration/
+│   │   ├── test_api.py
+│   │   └── test_database.py
+│   └── performance/
+│       └── test_benchmarks.py
+└── helpers/
+    ├── assertions.py
+    ├── builders.py
+    └── fixtures.py
+```
+
+MASTERY CHECKLIST:
+[ ] Can write, organize, and run pytest tests
+[ ] Master fixtures (all scopes, conftest, chaining)
+[ ] Expert in parametrization and markers
+[ ] Can mock dependencies effectively
+[ ] Generate and analyze coverage reports
+[ ] Use essential plugins (xdist, html, cov, mock)
+[ ] Create custom helpers and hooks
+[ ] Test APIs, databases, and files
+[ ] Integrate with CI/CD
+[ ] Handle flaky tests and performance testing
+[ ] Generate professional reports
+[ ] Follow best practices and patterns
+
+FINAL ASSESSMENT:
+Complete the capstone project and self-evaluate:
+- Can I build a test framework from scratch? (Yes/No)
+- Do I understand all pytest concepts? (Yes/No)
+- Can I work on real projects independently? (Yes/No)
+- Am I ready for pytest certification? (Yes/No)
+
+================================================================================
+                        DAILY PRACTICE EXERCISES
+================================================================================
+
+COMMIT TO DAILY PRACTICE:
+- Minimum 2 hours focused study
+- Code at least 30 minutes
+- Review previous day's learnings
+- Build incrementally (don't skip days)
+
+WEEKLY GOALS:
+- Week 1: 50+ tests written
+- Week 2: 100+ tests with fixtures
+- Week 3: Complete API test suite
+- Week 4: Production-ready framework
+
+PRACTICE RESOURCES:
+1. LeetCode-style problems (test your solutions with pytest)
+2. Public APIs for testing practice:
+   - JSONPlaceholder: https://jsonplaceholder.typicode.com
+   - ReqRes: https://reqres.in
+   - Random User: https://randomuser.me/api
+3. Your own Python projects (add tests!)
+
+================================================================================
+                        RESOURCES & REFERENCES
+================================================================================
+
+OFFICIAL DOCUMENTATION:
+- Pytest Docs: https://docs.pytest.org
+- Pytest Plugins: https://docs.pytest.org/en/latest/reference/plugin_list.html
+
+ESSENTIAL PLUGINS:
+- pytest-cov (coverage)
+- pytest-mock (mocking)
+- pytest-xdist (parallel)
+- pytest-html (reporting)
+- pytest-benchmark (performance)
+- pytest-timeout (timeouts)
+
+BOOKS:
+- "Python Testing with pytest" by Brian Okken
+- "Test-Driven Development with Python" by Harry Percival
+
+VIDEO COURSES:
+- Real Python: Pytest tutorials
+- Talk Python: Testing courses
+- YouTube: Pytest complete tutorials
+
+PRACTICE PLATFORMS:
+- Exercism.io (Python track with tests)
+- LeetCode (write tests for solutions)
+- GitHub repos with good test examples
+
+COMMUNITIES:
+- Python Discord (Testing channel)
+- Reddit: r/learnpython, r/Python
+- Stack Overflow: pytest tag
+
+================================================================================
+                        CERTIFICATION & NEXT STEPS
+================================================================================
+
+AFTER 30 DAYS:
+[ ] Build portfolio project with comprehensive tests
+[ ] Contribute to open-source (add tests to projects)
+[ ] Write blog posts about pytest learnings
+[ ] Mentor others or answer Stack Overflow questions
+
+ADVANCED TOPICS (Post 30 days):
+- Property-based testing (Hypothesis)
+- Pytest plugin development
+- Advanced mocking strategies
+- Contract testing (Pact)
+- Mutation testing (mutpy)
+
+CAREER APPLICATIONS:
+- SDET (Software Development Engineer in Test)
+- QA Automation Engineer
+- Python Backend Developer
+- DevOps Engineer
+- Test Architect
+
+CERTIFICATIONS:
+- ISTQB Test Automation Engineer
+- Python Institute certifications
+- AWS/Azure DevOps certifications
+
+================================================================================
+                            SUCCESS METRICS
+================================================================================
+
+BY DAY 10:
+✓ Written 100+ tests
+✓ Comfortable with fixtures and markers
+✓ Using pytest daily
+
+BY DAY 20:
+✓ Written 300+ tests
+✓ Built API test suite
+✓ Using plugins effectively
+✓ Code coverage > 80%
+
+BY DAY 30:
+✓ Written 500+ tests
+✓ Complete test framework built
+✓ Production-ready testing skills
+✓ Confident pytest expert
+
+FINAL GOAL:
+★ Can confidently say "I know pytest in detail"
+★ Can build test automation frameworks independently
+★ Can mentor others on pytest
+★ Ready for professional testing roles
+
+================================================================================
+                              MOTIVATION
+================================================================================
+
+REMEMBER:
+- Consistency beats intensity
+- Practice daily, even 30 minutes helps
+- Build real projects, not just tutorials
+- Testing is a superpower in software development
+- Great tests = great code quality
+
+YOU'VE GOT THIS! 🚀
+
+Start Day 1 tomorrow. Code every day. Build amazing test suites.
+In 30 days, you'll be a pytest expert!
+
+================================================================================

@@ -1,0 +1,367 @@
+SDLC & Agile Interview Prep (Extended)
+Date: 2026-03-07
+
+How to use this file
+- Read the concepts and definitions first.
+- Practice the questions out loud and customize with your real examples.
+- For experience questions, use STAR (Situation, Task, Action, Result).
+
+SDLC Models and When to Use
+1) Waterfall
+- Sequential phases with fixed scope and heavy documentation.
+- Good for stable requirements and regulated environments.
+
+2) V-Model
+- Verification and validation mapped to each development phase.
+- Good when testing discipline and traceability are required.
+
+3) Iterative/Incremental
+- Build in cycles and release in increments.
+- Good when early feedback is needed.
+
+4) Spiral
+- Risk-driven iterations with prototypes.
+- Good for high-risk, complex projects.
+
+5) Agile
+- Short iterations, continuous feedback, adaptive scope.
+- Good when requirements change frequently.
+
+6) DevOps
+- Integration of development and operations with automation and monitoring.
+- Good for fast, reliable delivery.
+
+SDLC Core Phases (Common Waterfall View)
+1) Requirements
+- Gather business/user needs, scope, constraints.
+
+2) Analysis
+- Feasibility, risks, and detailed requirement clarification.
+
+3) Design
+- Architecture, data models, interfaces, HLD/LLD.
+
+4) Implementation
+- Coding, unit tests, code reviews.
+
+5) Testing
+- Integration/system/UAT validation.
+
+6) Deployment
+- Release to production, rollout, rollback plan.
+
+7) Maintenance
+- Support, monitoring, defect fixes, enhancements.
+
+Requirements Concepts
+1) Types
+- Business, functional, non-functional, user stories, constraints.
+
+2) Requirements quality
+- Clear, atomic, testable, traceable, prioritized.
+
+3) Requirements documents
+- BRD, PRD, SRS, FRS.
+
+4) Use case vs user story
+- Use case: detailed interaction flow.
+- User story: brief user value statement.
+
+Testing Levels
+1) Unit
+2) Integration (API, service, DB)
+3) System (end-to-end)
+4) Acceptance (UAT)
+5) Regression (retest after changes)
+
+Testing Types
+1) Functional
+2) Non-functional
+- Performance (load, stress, soak)
+- Security
+- Usability and accessibility
+- Compatibility (browser/OS/device)
+3) Specialized
+- Exploratory, Ad hoc
+- Smoke and Sanity
+- Installation/upgrade
+- Localization and i18n
+
+Test Design Techniques
+1) Equivalence partitioning
+2) Boundary value analysis
+3) Decision tables
+4) State transition testing
+5) Pairwise (orthogonal array)
+6) Error guessing
+
+QA and Quality Terminology
+1) QA vs QC
+- QA: prevention, process focus.
+- QC: detection, product focus.
+
+2) Verification vs Validation
+- Verification: build the product right.
+- Validation: build the right product.
+
+3) Test plan vs test strategy
+- Strategy: org or program level direction.
+- Plan: project level scope and approach.
+
+4) Test case vs test scenario
+- Scenario: high-level objective.
+- Case: detailed steps and expected result.
+
+5) Entry/Exit criteria
+- Start or stop conditions for testing activities.
+
+Defect Management
+1) Defect lifecycle
+- New -> Open -> In Progress -> Fixed -> Retest -> Verified -> Closed
+- Optional: Reopen, Deferred, Duplicate, Won't Fix, Not Reproducible
+
+2) Severity vs Priority
+- Severity: business/technical impact.
+- Priority: urgency to fix.
+
+3) Defect leakage vs defect escape
+- Leakage: found in later phase.
+- Escape: found in production.
+
+4) Root Cause Analysis (RCA)
+- Identify why a defect happened and prevent recurrence.
+
+5) Defect triage
+- Decide fix order based on risk, impact, effort, release window.
+
+6) Defect metrics
+- Defect density, reopen rate, DRE (defect removal efficiency).
+
+Test Documentation and Artifacts
+1) Requirements and design docs
+- BRD, PRD, SRS, HLD, LLD.
+
+2) Testing docs
+- Test strategy, test plan, test cases, RTM, test report.
+
+3) Execution docs
+- Test results, defect reports, release notes.
+
+Traceability Matrix (RTM)
+- Maps requirements to test cases and ensures coverage.
+
+Risk-Based Testing
+- Focus on high impact and high likelihood areas.
+
+Change and Configuration Management
+1) Change control
+- Formal approval of changes to scope and requirements.
+
+2) Configuration management
+- Version control, baselines, build/release tracking.
+
+Environments and Builds
+1) Environments
+- Dev, QA/Test, Staging/UAT, Production.
+
+2) Build vs Release
+- Build: internal version for testing.
+- Release: user-facing delivery.
+
+3) Deployment strategies
+- Blue/green, canary, rolling, feature flags.
+
+Shift-Left and Shift-Right
+1) Shift-left
+- Test earlier (requirements reviews, unit and API tests).
+
+2) Shift-right
+- Test in production (monitoring, A/B tests, logging).
+
+Agile Concepts (Expanded)
+Agile Values
+- Individuals and interactions over processes and tools.
+- Working software over comprehensive documentation.
+- Customer collaboration over contract negotiation.
+- Responding to change over following a plan.
+
+Agile Principles (summary)
+- Deliver value early and often, welcome change, continuous improvement.
+
+Scrum Roles
+1) Product Owner
+- Owns backlog, prioritizes value, clarifies requirements.
+
+2) Scrum Master
+- Facilitates Scrum, removes impediments, coaches team.
+
+3) Developers
+- Build, test, and deliver the increment.
+
+Scrum Events
+1) Sprint Planning
+- Define sprint goal and select backlog items.
+
+2) Daily Scrum
+- 15-minute sync on progress and impediments.
+
+3) Sprint Review
+- Demo increment, gather feedback.
+
+4) Sprint Retrospective
+- Inspect and improve the process.
+
+Scrum Artifacts
+1) Product Backlog
+2) Sprint Backlog
+3) Increment
+
+Agile Planning and Estimation
+1) Estimation methods
+- Story points, T-shirt sizes, ideal hours.
+- Planning poker, affinity estimation.
+
+2) Velocity
+- Average completed story points per sprint.
+
+3) Capacity vs Velocity
+- Capacity: available effort for a sprint.
+- Velocity: historical delivered points.
+
+User Stories and Acceptance Criteria
+1) User story template
+- As a [user], I want [goal], so that [benefit].
+
+2) INVEST criteria
+- Independent, Negotiable, Valuable, Estimable, Small, Testable.
+
+3) Acceptance criteria formats
+- Given/When/Then or checklist style.
+
+Definition of Ready (DoR)
+- Clear, small, testable, acceptance criteria defined, dependencies known.
+
+Definition of Done (DoD)
+- Code complete, tests passing, review done, documentation updated.
+
+Agile Metrics
+1) Burndown and burnup
+2) Lead time vs cycle time
+3) WIP limits (Kanban)
+4) Throughput
+
+Agile Frameworks (beyond Scrum)
+1) Kanban
+- Continuous flow, visual board, WIP limits.
+
+2) Extreme Programming (XP)
+- Pair programming, TDD, continuous integration.
+
+3) Lean
+- Eliminate waste, optimize flow.
+
+4) SAFe (Scaled Agile)
+- Large enterprise scaling framework.
+
+Agile Testing Concepts
+1) Agile testing quadrants
+- Q1: unit/component, developer tests.
+- Q2: functional/story tests.
+- Q3: exploratory/usability tests.
+- Q4: performance/security tests.
+
+2) CI/CD
+- Continuous Integration, Continuous Delivery/Deployment.
+
+3) Automation pyramid
+- Unit > API/service > UI tests.
+
+4) Test automation strategy
+- What to automate, where, and how to maintain.
+
+Release and Roadmapping
+1) Release planning
+- Scope, timeline, capacity, risks.
+
+2) MVP (Minimum Viable Product)
+- Smallest release to learn from users.
+
+3) Technical debt
+- Short-term tradeoffs that slow future delivery.
+
+4) Spikes
+- Time-boxed research to reduce uncertainty.
+
+Agile vs Waterfall (Quick Compare)
+- Agile: iterative, adaptive, frequent feedback.
+- Waterfall: sequential, fixed scope phases.
+
+Probable Interview Questions (SDLC)
+1) Explain SDLC phases and key outputs of each phase.
+2) Compare Waterfall, V-Model, and Agile.
+3) What is RTM and how do you build it?
+4) How do you define entry and exit criteria?
+5) What is verification vs validation? Give examples.
+6) How do you prioritize testing when time is limited?
+7) Explain severity vs priority with an example.
+8) What is defect leakage and how can it be reduced?
+9) What is the difference between test plan and test strategy?
+10) What is a test case vs test scenario?
+11) What are smoke, sanity, regression testing?
+12) Explain different testing levels with examples.
+13) How do you handle requirement changes during testing?
+14) What is RCA and how do you perform it?
+15) What is risk-based testing and how do you apply it?
+16) Explain test design techniques you use.
+17) What is UAT and who signs off?
+18) What is configuration management in testing?
+19) What metrics do you track to measure quality?
+20) How do you report test results and status to stakeholders?
+
+Probable Interview Questions (Agile)
+1) Explain Agile values and how they influence your work.
+2) Roles and responsibilities of PO, SM, and Developers.
+3) What happens in Sprint Planning and Sprint Review?
+4) Why is Daily Scrum important?
+5) Explain user story and acceptance criteria.
+6) What is DoR vs DoD? Why are they important?
+7) How do you estimate work? Which method do you prefer?
+8) What is velocity and how do you use it?
+9) What is a burndown chart and how do you interpret it?
+10) What is backlog refinement and why is it needed?
+11) What is a sprint retrospective and what outcomes do you expect?
+12) How do you handle last-minute changes in a sprint?
+13) What is a spike and when do you suggest one?
+14) Explain technical debt and how you manage it.
+15) How do you ensure quality within a sprint?
+16) How do you balance automation and manual testing in Agile?
+17) What is Kanban and how is it different from Scrum?
+18) How do you work with a distributed Agile team?
+
+Scenario/Experience Questions (QA/Agile)
+1) Describe a time you found a critical bug late in a sprint.
+2) How do you test when requirements are unclear or changing?
+3) Tell me about a time you pushed back on story readiness.
+4) How do you collaborate with developers in Agile?
+5) How do you prioritize testing when the deadline is tight?
+6) Describe a defect you missed and what you learned.
+7) Share a situation where automation saved sprint time.
+8) Explain how you handled a release with open defects.
+9) Describe a time you improved test coverage or reduced leakage.
+10) How do you communicate risks to the PO and stakeholders?
+
+Quick Reference: One-line Definitions
+- Acceptance criteria: conditions a story must meet to be accepted.
+- Backlog: ordered list of work for the product.
+- Burndown chart: remaining work across the sprint timeline.
+- CI/CD: automated build, test, and release pipeline.
+- DoD: shared completion checklist.
+- DoR: shared readiness checklist.
+- Increment: shippable product at sprint end.
+- MVP: smallest product to learn from users.
+- RTM: mapping from requirements to tests.
+- Spike: time-boxed research task.
+- Sprint: fixed-length iteration.
+- Story points: relative effort estimate.
+- Technical debt: tradeoffs that increase future cost.
+- Velocity: completed points per sprint.
